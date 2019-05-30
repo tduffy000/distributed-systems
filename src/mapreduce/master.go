@@ -62,10 +62,10 @@ func (mr *MapReduce) RunMaster() *list.List {
         args.Operation = Map
         args.NumOtherPhase = mr.nReduce
 
-        // send RPC to worker
+        // send RPC to worker; save reply
         ok := call(wk, "Worker.DoJob", args, &reply)
 
-        // check reply from worker
+        // handle potential failures from RPC to worker
         if !ok {
           fmt.Printf("Worker %s doMap error\n", wk)
         } else {
@@ -109,8 +109,10 @@ func (mr *MapReduce) RunMaster() *list.List {
         args.Operation = Reduce
         args.NumOtherPhase = mr.nMap
 
+        // send RPC to worker; save reply
         ok := call(wk, "Worker.DoJob", args, &reply)
 
+        // handle potential failures from RPC to worker
         if !ok {
           fmt.Printf("Worker %s doReduce error\n", wk)
         } else {
