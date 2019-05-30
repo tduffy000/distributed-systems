@@ -33,8 +33,8 @@ func (wk *Worker) DoJob(arg *DoJobArgs, res *DoJobReply) error {
   return nil
 }
 
-// The master is telling us to shutdown. Report the number of Jobs we
-// have processed.
+// The master is telling us to shutdown.
+// Report the number of Jobs we have processed.
 func (wk *Worker) Shutdown(args *ShutdownArgs, res *ShutdownReply) error {
   DPrintf("Shutdown %s\n", wk.name)
   res.Njobs = wk.nJobs
@@ -88,5 +88,5 @@ func RunWorker(MasterAddress string, me string,
     }
   }
   wk.l.Close()
-  DPrintf("RunWorker %s exit\n", me)    
+  DPrintf("RunWorker %s exit\n", me)
 }

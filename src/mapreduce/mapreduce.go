@@ -11,6 +11,7 @@ import "net/rpc"
 import "net"
 import "bufio"
 import "hash/fnv"
+import "sync"
 
 // import "os/exec"
 
@@ -63,7 +64,8 @@ type MapReduce struct {
   // Map of registered workers that you need to keep up to date
   Workers map[string]*WorkerInfo
 
-  // add any additional state here
+  // mutual exclusion
+  mux *sync.Mutex // @see https://tour.golang.org/concurrency/9
 }
 
 func InitMapReduce(nmap int, nreduce int,
@@ -78,6 +80,9 @@ func InitMapReduce(nmap int, nreduce int,
   mr.DoneChannel = make(chan bool)
 
   // initialize any additional state here
+  mr.Workers = make(map[string]*WorkerInfo)
+  mr.mux = &sync.Mutex{}
+
   return mr
 }
 
